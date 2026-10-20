@@ -10,7 +10,7 @@ Como usar: faça **uma tarefa por vez**, na ordem. Cada tarefa termina com o pro
 - [x] **T0.1** Repositório
   - `git init`, `.gitignore` (`dotnet new gitignore` + `node_modules/` e `*.db`) e commit inicial com `docs/`, `README.md` e `CLAUDE.md`
   - Criar o repositório no GitHub e fazer o primeiro push
-- [ ] **T0.2** Solução .NET
+- [x] **T0.2** Solução .NET
   - `backend/Habitos.slnx` com `Habitos.Dominio` e `Habitos.Infraestrutura` (classlib), `Habitos.Api` (web) e `Habitos.Dominio.Testes` e `Habitos.Api.Testes` (xUnit)
   - Referências respeitando as regras de dependência de `docs/tecnologia.md`
   - `Directory.Build.props` com `Nullable`, `ImplicitUsings` e `TreatWarningsAsErrors`
