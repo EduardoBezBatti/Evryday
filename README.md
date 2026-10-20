@@ -26,7 +26,35 @@ Projeto pessoal desenvolvido com **Spec Driven Development**: cada funcionalidad
 
 ## Como rodar
 
-> Esta seção será preenchida ao concluir a Fase 0 da spec 001 (tarefa T0.5).
+### Pré-requisitos
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/)
+- [Node.js](https://nodejs.org/) (v22 ou superior)
+
+### Back-end
+
+```bash
+# Compilar e rodar testes
+dotnet build backend
+dotnet test backend
+
+# Executar a API (http://localhost:5271)
+dotnet run --project backend/src/Habitos.Api
+```
+
+### Front-end
+
+```bash
+# Instalar dependências
+cd frontend
+npm install
+
+# Rodar testes
+npm test
+
+# Iniciar o servidor de desenvolvimento (http://localhost:4200 com proxy /api → API)
+npm start
+```
 
 ## Estrutura
 

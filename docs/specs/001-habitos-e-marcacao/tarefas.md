@@ -22,7 +22,7 @@ Como usar: faça **uma tarefa por vez**, na ordem. Cada tarefa termina com o pro
 - [x] **T0.4** CI no GitHub Actions
   - `.github/workflows/ci.yml` com os jobs `backend` e `frontend` (ver `docs/tecnologia.md`)
   - Pronto quando: pipeline verde no GitHub
-- [ ] **T0.5** Esqueleto ponta a ponta
+- [x] **T0.5** Esqueleto ponta a ponta
   - `GET /api/saude` na API e uma página provisória no Angular exibindo o resultado via proxy
   - Preencher a seção "Como rodar" do `README.md`
   - Pronto quando: com API e front-end rodando, o navegador mostra "API ok"
