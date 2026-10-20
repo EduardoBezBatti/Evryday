@@ -29,7 +29,7 @@ Como usar: faça **uma tarefa por vez**, na ordem. Cada tarefa termina com o pro
 
 ## Fase 1 — Domínio (comece pelos testes)
 
-- [ ] **T1.1** Frequência
+- [x] **T1.1** Frequência
   - `TipoFrequencia`, `DiasDaSemana` (flags) e o record `Frequencia` com `Diaria()`, `NosDias()`, `VezesNaSemana()` e `PreveDia()`
   - `ExcecaoDeValidacao` (campo + mensagem)
   - Testes: ao menos um dia; meta de 1 a 6; `PreveDia` nos três tipos
