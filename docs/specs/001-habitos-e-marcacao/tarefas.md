@@ -34,7 +34,7 @@ Como usar: faça **uma tarefa por vez**, na ordem. Cada tarefa termina com o pro
   - `ExcecaoDeValidacao` (campo + mensagem)
   - Testes: ao menos um dia; meta de 1 a 6; `PreveDia` nos três tipos
   - _Requisitos: 1.6, 1.7, 1.8, 5.2_
-- [ ] **T1.2** Semana
+- [x] **T1.2** Semana
   - `Semana.InicioDe(data)` retornando a segunda-feira
   - Testes: segunda, quarta e domingo da mesma semana retornam a mesma segunda
   - _Requisitos: 7.2_
