@@ -19,7 +19,7 @@ Como usar: faça **uma tarefa por vez**, na ordem. Cada tarefa termina com o pro
   - `ng new` em `frontend/` (com roteamento, SCSS, sem SSR) e `ng add @angular/material`
   - Registrar o locale `pt-BR`; `proxy.conf.json` com `/api` → URL da API
   - Pronto quando: `npm test` e `npm run build` passam
-- [ ] **T0.4** CI no GitHub Actions
+- [x] **T0.4** CI no GitHub Actions
   - `.github/workflows/ci.yml` com os jobs `backend` e `frontend` (ver `docs/tecnologia.md`)
   - Pronto quando: pipeline verde no GitHub
 - [ ] **T0.5** Esqueleto ponta a ponta
