@@ -484,3 +484,8 @@ $RECYCLE.BIN/
 *.db
 *.db-shm
 *.db-wal
+
+# Angular
+.angular/
+frontend/dist/
+frontend/.angular/

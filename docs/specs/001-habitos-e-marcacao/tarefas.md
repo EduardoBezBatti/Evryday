@@ -15,7 +15,7 @@ Como usar: faça **uma tarefa por vez**, na ordem. Cada tarefa termina com o pro
   - Referências respeitando as regras de dependência de `docs/tecnologia.md`
   - `Directory.Build.props` com `Nullable`, `ImplicitUsings` e `TreatWarningsAsErrors`
   - Pronto quando: `dotnet build backend` e `dotnet test backend` passam
-- [ ] **T0.3** App Angular
+- [x] **T0.3** App Angular
   - `ng new` em `frontend/` (com roteamento, SCSS, sem SSR) e `ng add @angular/material`
   - Registrar o locale `pt-BR`; `proxy.conf.json` com `/api` → URL da API
   - Pronto quando: `npm test` e `npm run build` passam
