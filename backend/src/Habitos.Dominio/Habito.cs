@@ -74,6 +74,63 @@ public class Habito
         Cor = corValida;
     }
 
+    public Frequencia FrequenciaEm(DateOnly data)
+    {
+        var agenda = _agendas
+            .Where(a => a.VigenteDesde <= data)
+            .OrderByDescending(a => a.VigenteDesde)
+            .FirstOrDefault()
+            ?? _agendas.OrderBy(a => a.VigenteDesde).First();
+
+        return agenda.Frequencia;
+    }
+
+    public bool PreveDia(DateOnly data)
+    {
+        return FrequenciaEm(data).PreveDia(data);
+    }
+
+    public void AlterarFrequencia(Frequencia novaFrequencia, DateOnly hoje)
+    {
+        if (novaFrequencia is null)
+        {
+            throw new ExcecaoDeValidacao("frequencia", "A frequência é obrigatória.");
+        }
+
+        // 1. Se FrequenciaEm(hoje) == nova, não faz nada
+        if (FrequenciaEm(hoje) == novaFrequencia)
+        {
+            return;
+        }
+
+        // 2. Se já existe agenda com VigenteDesde == hoje
+        var agendaDeHoje = _agendas.FirstOrDefault(a => a.VigenteDesde == hoje);
+        if (agendaDeHoje is not null)
+        {
+            var agendaAnterior = _agendas
+                .Where(a => a.VigenteDesde < hoje)
+                .OrderByDescending(a => a.VigenteDesde)
+                .FirstOrDefault();
+
+            if (agendaAnterior is not null && agendaAnterior.Frequencia == novaFrequencia)
+            {
+                // Se ficou igual à agenda anterior, remove a agenda de hoje
+                _agendas.Remove(agendaDeHoje);
+            }
+            else
+            {
+                // Substitui a frequência da agenda de hoje
+                agendaDeHoje.AtualizarFrequencia(novaFrequencia);
+            }
+
+            return;
+        }
+
+        // 3. Senão, adiciona uma nova agenda com VigenteDesde = hoje
+        var novaAgenda = new AgendaHabito(Guid.CreateVersion7(), Id, hoje, novaFrequencia);
+        _agendas.Add(novaAgenda);
+    }
+
     private static (string Nome, string? Descricao, string Cor) ValidarDados(
         string? nome,
         string? descricao,

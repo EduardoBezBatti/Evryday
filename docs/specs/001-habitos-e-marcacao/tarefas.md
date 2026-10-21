@@ -42,7 +42,7 @@ Como usar: faça **uma tarefa por vez**, na ordem. Cada tarefa termina com o pro
   - `Habito.Criar()`, `AtualizarDados()` e `PaletaDeCores`
   - Testes: nome com espaços nas pontas, com 0 e com 61 caracteres; descrição com 201; cor fora da paleta; data de início = hoje; primeira agenda vigente desde hoje
   - _Requisitos: 1.1, 1.2, 1.4, 1.5, 3.1_
-- [ ] **T1.4** Agenda versionada
+- [x] **T1.4** Agenda versionada
   - `AgendaHabito`, `AlterarFrequencia()` e `FrequenciaEm()`
   - Testes: a mudança vale de hoje em diante; dias passados mantêm a frequência anterior; duas mudanças no mesmo dia; voltar à frequência anterior no mesmo dia remove a agenda de hoje
   - _Requisitos: 3.3, 3.4_
