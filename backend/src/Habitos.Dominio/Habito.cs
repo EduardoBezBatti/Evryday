@@ -131,6 +131,54 @@ public class Habito
         _agendas.Add(novaAgenda);
     }
 
+    public bool EstaMarcadoEm(DateOnly data)
+    {
+        return _marcacoes.Any(m => m.Data == data);
+    }
+
+    public bool EhExtra(DateOnly data)
+    {
+        return EstaMarcadoEm(data) && !PreveDia(data);
+    }
+
+    public void Marcar(DateOnly data, DateOnly hoje, DateTime agoraUtc)
+    {
+        if (data != hoje)
+        {
+            throw new ExcecaoDeRegraDeNegocio("Só é possível marcar o dia de hoje");
+        }
+
+        if (EstaMarcadoEm(data))
+        {
+            return;
+        }
+
+        var marcacao = new Marcacao(Guid.CreateVersion7(), Id, data, agoraUtc);
+        _marcacoes.Add(marcacao);
+    }
+
+    public void Desmarcar(DateOnly data, DateOnly hoje)
+    {
+        if (data != hoje)
+        {
+            throw new ExcecaoDeRegraDeNegocio("Só é possível marcar o dia de hoje");
+        }
+
+        var marcacao = _marcacoes.FirstOrDefault(m => m.Data == data);
+        if (marcacao is not null)
+        {
+            _marcacoes.Remove(marcacao);
+        }
+    }
+
+    public int MarcacoesNaSemana(DateOnly data)
+    {
+        var inicioSemana = Semana.InicioDe(data);
+        var fimSemana = inicioSemana.AddDays(6);
+
+        return _marcacoes.Count(m => m.Data >= inicioSemana && m.Data <= fimSemana);
+    }
+
     private static (string Nome, string? Descricao, string Cor) ValidarDados(
         string? nome,
         string? descricao,

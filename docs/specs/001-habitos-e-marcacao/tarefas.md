@@ -46,7 +46,7 @@ Como usar: faça **uma tarefa por vez**, na ordem. Cada tarefa termina com o pro
   - `AgendaHabito`, `AlterarFrequencia()` e `FrequenciaEm()`
   - Testes: a mudança vale de hoje em diante; dias passados mantêm a frequência anterior; duas mudanças no mesmo dia; voltar à frequência anterior no mesmo dia remove a agenda de hoje
   - _Requisitos: 3.3, 3.4_
-- [ ] **T1.5** Marcações
+- [x] **T1.5** Marcações
   - `Marcacao`, `Marcar()`, `Desmarcar()`, `EstaMarcadoEm()`, `EhExtra()`, `MarcacoesNaSemana()` e `ExcecaoDeRegraDeNegocio`
   - Testes: só hoje; marcar duas vezes; desmarcar sem marcação; extra em dia não previsto; extra vira prevista após mudança de frequência; contagem da semana de segunda a domingo
   - _Requisitos: 3.5, 5.5, 6.1, 6.2, 6.3, 6.4, 6.5_
