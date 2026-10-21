@@ -38,7 +38,7 @@ Como usar: faça **uma tarefa por vez**, na ordem. Cada tarefa termina com o pro
   - `Semana.InicioDe(data)` retornando a segunda-feira
   - Testes: segunda, quarta e domingo da mesma semana retornam a mesma segunda
   - _Requisitos: 7.2_
-- [ ] **T1.3** Criação e dados do hábito
+- [x] **T1.3** Criação e dados do hábito
   - `Habito.Criar()`, `AtualizarDados()` e `PaletaDeCores`
   - Testes: nome com espaços nas pontas, com 0 e com 61 caracteres; descrição com 201; cor fora da paleta; data de início = hoje; primeira agenda vigente desde hoje
   - _Requisitos: 1.1, 1.2, 1.4, 1.5, 3.1_
