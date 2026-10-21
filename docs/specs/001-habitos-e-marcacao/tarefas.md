@@ -53,7 +53,7 @@ Como usar: faça **uma tarefa por vez**, na ordem. Cada tarefa termina com o pro
 
 ## Fase 2 — Persistência e relógio
 
-- [ ] **T2.1** `HabitosDbContext` e mapeamentos
+- [x] **T2.1** `HabitosDbContext` e mapeamentos
   - Tabelas, `NomeNormalizado` com índice único, índices únicos de agenda e de marcação, cascata e complex type `Frequencia`
   - _Requisitos: 1.3, 4.2, 6.3_
 - [ ] **T2.2** Migration inicial
