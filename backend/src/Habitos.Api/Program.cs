@@ -26,16 +26,21 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+// Ativando Swagger globalmente para garantir acesso durante o desenvolvimento
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Evryday API v1");
+    c.RoutePrefix = "swagger"; 
+});
 
 app.UseExceptionHandler();
 
-app.MapGet("/", () => "Hello World!");
-app.MapGet("/api/saude", () => Results.Ok(new { status = "API ok" }));
+app.MapGet("/", () => "Hello World!")
+    .WithTags("Sistema");
+
+app.MapGet("/api/saude", () => Results.Ok(new { status = "API ok" }))
+    .WithTags("Sistema");
 
 // --- T3.3 Cadastro e Consulta ---
 
@@ -58,7 +63,7 @@ app.MapPost("/api/habitos", async (HabitoRequest req, HabitosDbContext db, IRelo
     if (await db.Habitos.AnyAsync(h => h.NomeNormalizado == habito.NomeNormalizado))
     {
         return Results.Problem(
-            detail: $"Já existe um hábito com o nome {req.Nome}.",
+            detail: $"O hábito '{req.Nome}' já existe. Por favor, escolha um nome único para diferenciar seus hábitos.",
             statusCode: 400,
             title: "Nome duplicado"
         );
@@ -74,10 +79,11 @@ app.MapPost("/api/habitos", async (HabitoRequest req, HabitosDbContext db, IRelo
         habito.Cor,
         habito.DataInicio,
         "",
-        0, 
-        0 
+        0,
+        0
     ));
-});
+})
+.WithTags("Hábitos");
 
 app.MapGet("/api/habitos", async (HabitosDbContext db, IRelogio relogio) =>
 {
@@ -93,7 +99,8 @@ app.MapGet("/api/habitos", async (HabitosDbContext db, IRelogio relogio) =>
         CalculadoraDeSequencia.Calcular(h, hoje).Atual,
         CalculadoraDeSequencia.Calcular(h, hoje).Maior
     )));
-});
+})
+.WithTags("Hábitos");
 
 app.MapGet("/api/habitos/{id:guid}", async (Guid id, HabitosDbContext db, IRelogio relogio) =>
 {
@@ -111,7 +118,8 @@ app.MapGet("/api/habitos/{id:guid}", async (Guid id, HabitosDbContext db, IRelog
         CalculadoraDeSequencia.Calcular(habito, hoje).Atual,
         CalculadoraDeSequencia.Calcular(habito, hoje).Maior
     ));
-});
+})
+.WithTags("Hábitos");
 
 // --- T3.4 Edição ---
 
@@ -127,7 +135,7 @@ app.MapPut("/api/habitos/{id:guid}", async (Guid id, HabitoUpdateRequest req, Ha
     if (await db.Habitos.AnyAsync(h => h.NomeNormalizado == nomeNormalizado && h.Id != id))
     {
         return Results.Problem(
-            detail: $"Já existe outro hábito com o nome {req.Nome}.",
+            detail: $"O nome '{req.Nome}' já está sendo usado por outro hábito. Por favor, use um nome diferente.",
             statusCode: 400,
             title: "Nome duplicado"
         );
@@ -145,7 +153,8 @@ app.MapPut("/api/habitos/{id:guid}", async (Guid id, HabitoUpdateRequest req, Ha
 
     await db.SaveChangesAsync();
     return Results.NoContent();
-});
+})
+.WithTags("Hábitos");
 
 // --- T3.5 Exclusão ---
 
@@ -158,7 +167,8 @@ app.MapDelete("/api/habitos/{id:guid}", async (Guid id, HabitosDbContext db) =>
     await db.SaveChangesAsync();
 
     return Results.NoContent();
-});
+})
+.WithTags("Hábitos");
 
 // --- T3.6 Endpoint da tela "Hoje" ---
 
@@ -198,7 +208,8 @@ app.MapGet("/api/hoje", async (HabitosDbContext db, IRelogio relogio) =>
         progresso,
         progresso >= 1.0 && previstosHoje > 0
     ));
-});
+})
+.WithTags("Hoje");
 
 // --- T3.7 Marcações ---
 
@@ -218,7 +229,8 @@ app.MapGet("/api/habitos/{id:guid}/historico", async (Guid id, HabitosDbContext 
         dataFim = DateOnly.FromDateTime(DateTime.UtcNow),
         marcacoes = marcacoes
     });
-});
+})
+.WithTags("Marcações");
 
 app.MapPut("/api/habitos/{id:guid}/marcacoes/{data}", async (Guid id, DateOnly data, HabitosDbContext db, IRelogio relogio) =>
 {
@@ -226,7 +238,7 @@ app.MapPut("/api/habitos/{id:guid}/marcacoes/{data}", async (Guid id, DateOnly d
     if (data != hoje)
     {
         return Results.Problem(
-            detail: $"Só é possível marcar o dia de hoje ({hoje:yyyy-MM-dd}).",
+            detail: $"A marcação de hábitos é estritamente honesta: você só pode marcar o dia de hoje ({hoje:yyyy-MM-dd}). Não é permitido retroceder ou adiantar marcações.",
             statusCode: 422,
             title: "Data inválida"
         );
@@ -239,7 +251,8 @@ app.MapPut("/api/habitos/{id:guid}/marcacoes/{data}", async (Guid id, DateOnly d
     await db.SaveChangesAsync();
 
     return Results.NoContent();
-});
+})
+.WithTags("Marcações");
 
 app.MapDelete("/api/habitos/{id:guid}/marcacoes/{data}", async (Guid id, DateOnly data, HabitosDbContext db, IRelogio relogio) =>
 {
@@ -247,7 +260,7 @@ app.MapDelete("/api/habitos/{id:guid}/marcacoes/{data}", async (Guid id, DateOnl
     if (data != hoje)
     {
         return Results.Problem(
-            detail: $"Só é possível desmarcar o dia de hoje ({hoje:yyyy-MM-dd}).",
+            detail: $"A desmarcação de hábitos é estritamente honesta: você só pode desmarcar o dia de hoje ({hoje:yyyy-MM-dd}).",
             statusCode: 422,
             title: "Data inválida"
         );
@@ -260,7 +273,8 @@ app.MapDelete("/api/habitos/{id:guid}/marcacoes/{data}", async (Guid id, DateOnl
     await db.SaveChangesAsync();
 
     return Results.NoContent();
-});
+})
+.WithTags("Marcações");
 
 app.Run();
 

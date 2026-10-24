@@ -79,10 +79,15 @@ public class Habito
         var agenda = _agendas
             .Where(a => a.VigenteDesde <= data)
             .OrderByDescending(a => a.VigenteDesde)
-            .FirstOrDefault()
-            ?? _agendas.OrderBy(a => a.VigenteDesde).First();
+            .FirstOrDefault();
 
-        return agenda.Frequencia;
+        if (agenda != null) return agenda.Frequencia;
+
+        var primeiraAgenda = _agendas
+            .OrderBy(a => a.VigenteDesde)
+            .FirstOrDefault();
+
+        return primeiraAgenda?.Frequencia ?? Frequencia.Diaria();
     }
 
     public bool PreveDia(DateOnly data)
@@ -218,9 +223,9 @@ public class Habito
         var corFormatada = cor?.Trim() ?? string.Empty;
         if (string.IsNullOrWhiteSpace(corFormatada) || !PaletaDeCores.Contem(corFormatada))
         {
-            throw new ExcecaoDeValidacao("cor", "A cor selecionada é inválida.");
+            throw new ExcecaoDeValidacao("cor", "A cor selecionada é inválida. Por favor, use um código hexadecimal (ex: #FF5252) ou um nome de cor aceito (ex: vermelho, azul, amarelo, verde, ciano, roxo, laranja, marrom).");
         }
 
-        return (nomeFormatado, descricaoFormatada, corFormatada.ToUpperInvariant());
+        return (nomeFormatado, descricaoFormatada, PaletaDeCores.Traduzir(corFormatada).ToUpperInvariant());
     }
 }
