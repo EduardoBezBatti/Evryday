@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -8,20 +8,23 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { HeatmapComponent } from './components/heatmap/heatmap.component';
+import { HabitosApiService } from '../../nucleo/api/habitos.service';
 
 @Component({
   selector: 'app-habito-form-dialog',
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
-    MatDialogModule, 
-    MatFormFieldModule, 
-    MatInputModule, 
-    MatSelectModule, 
-    MatButtonModule, 
-    MatDatepickerModule, 
-    MatNativeDateModule
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    HeatmapComponent
   ],
   template: `
     <h2 mat-dialog-title>{{ data?.id ? 'Editar' : 'Novo' }} Hábito</h2>
@@ -40,8 +43,8 @@ import { MatNativeDateModule } from '@angular/material/core';
         <div class="color-picker">
           <label>Cor do Hábito</label>
           <div class="palette">
-            <div *ngFor="let color of palette" 
-                 (click)="selectColor(color)" 
+            <div *ngFor="let color of palette"
+                 (click)="selectColor(color)"
                  [class.selected]="selectedColor === color"
                  [style.background-color]="color"
                  class="color-circle">
@@ -56,6 +59,11 @@ import { MatNativeDateModule } from '@angular/material/core';
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </form>
+
+      <div *ngIf="data?.id && historico" class="heatmap-section">
+        <h3>Histórico de Marcações</h3>
+        <app-heatmap [data]="historico" [corHabito]="selectedColor"></app-heatmap>
+      </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-button (click)="onCancel()">Cancelar</button>
@@ -70,11 +78,14 @@ import { MatNativeDateModule } from '@angular/material/core';
     .color-circle { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s; }
     .color-circle:hover { transform: scale(1.2); }
     .color-circle.selected { border-color: #000; transform: scale(1.2); }
+    .heatmap-section { margin-top: 2rem; border-top: 1px solid #eee; padding-top: 1rem; display: flex; flex-direction: column; align-items: center; }
+    .heatmap-section h3 { font-size: 1rem; color: #666; margin-bottom: 1rem; font-weight: 500; }
   `]
 })
-export class HabitoFormDialogComponent {
+export class HabitoFormDialogComponent implements OnInit {
   palette = ['#FF5252', '#FF4081', '#E040FB', '#7C4DFF', '#536DFE', '#448AFF', '#40C4FF', '#18FFFF'];
   selectedColor = '#FF5252';
+  historico: any = null;
 
   form = new FormGroup({
     nome: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(60)] }),
@@ -85,17 +96,36 @@ export class HabitoFormDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<HabitoFormDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private habitosService: HabitosApiService
   ) {
-    if (data) {
+  }
+
+  ngOnInit(): void {
+    if (this.data) {
       this.form.patchValue({
-        nome: data.nome,
-        descricao: data.descricao,
-        cor: data.cor,
-        dataInicio: new Date(data.dataInicio)
+        nome: this.data.nome,
+        descricao: this.data.descricao,
+        cor: this.data.cor,
+        dataInicio: new Date(this.data.dataInicio)
       });
-      this.selectedColor = data.cor;
+      this.selectedColor = this.data.cor;
+
+      if (this.data.id) {
+        this.carregarHistorico(this.data.id);
+      }
     }
+  }
+
+  private carregarHistorico(id: string): void {
+    console.log(`[HabitoFormDialog] Carregando histórico para o hábito: ${id}`);
+    this.habitosService.obterHistorico(id).subscribe({
+      next: (res) => {
+        console.log('[HabitoFormDialog] Histórico recebido:', res);
+        this.historico = res;
+      },
+      error: (err) => console.error('[HabitoFormDialog] Erro ao carregar histórico:', err)
+    });
   }
 
   selectColor(color: string) {

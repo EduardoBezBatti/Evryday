@@ -1,0 +1,17 @@
+<div class="heatmap-container">
+  <div class="heatmap-grid">
+    <div 
+      *ngFor="let day of days" 
+      class="heatmap-cell" 
+      [style.background-color]="day.marked ? corHabito : '#ebedf0'"
+      [class.today]="day.isToday"
+      [attr.title]="day.date | date:'dd/MM/yyyy'"
+    ></div>
+  </div>
+  <div class="heatmap-legend">
+    <span>Menos</span>
+    <div class="legend-cell" style="background-color: #ebedf0"></div>
+    <div class="legend-cell" [style.background-color]="corHabito"></div>
+    <span>Mais</span>
+  </div>
+</div>

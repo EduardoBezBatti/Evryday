@@ -47,4 +47,8 @@ export class HabitosApiService {
   desmarcarHabito(id: string, data: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/habitos/${id}/marcacoes/${data}`);
   }
+
+  obterHistorico(id: string): Observable<{ dataInicio: string, dataFim: string, marcacoes: string[] }> {
+    return this.http.get<{ dataInicio: string, dataFim: string, marcacoes: string[] }>(`${this.apiUrl}/habitos/${id}/historico`);
+  }
 }
