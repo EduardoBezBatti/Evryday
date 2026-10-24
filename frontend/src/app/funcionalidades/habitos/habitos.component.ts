@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -102,17 +102,27 @@ export class HabitosComponent implements OnInit {
   habitos: Habito[] = [];
 
   constructor(
-    private api: HabitosApiService, 
-    private dialog: MatDialog
+    private api: HabitosApiService,
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
+    console.log('[HabitosComponent] ngOnInit disparado');
     this.carregarHabitos();
   }
 
   carregarHabitos() {
-    this.api.listarHabitos().subscribe(data => {
-      this.habitos = data;
+    console.log('[HabitosComponent] Chamando carregarHabitos...');
+    this.api.listarHabitos().subscribe({
+      next: (data) => {
+        console.log('[HabitosComponent] Dados recebidos da API:', data);
+        this.habitos = [...data];
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('[HabitosComponent] Erro ao carregar hábitos:', err);
+      }
     });
   }
 
