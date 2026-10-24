@@ -90,7 +90,7 @@ public class Habito
         return FrequenciaEm(data).PreveDia(data);
     }
 
-    public void AlterarFrequencia(Frequencia novaFrequencia, DateOnly hoje)
+    public bool AlterarFrequencia(Frequencia novaFrequencia, DateOnly hoje)
     {
         if (novaFrequencia is null)
         {
@@ -100,7 +100,7 @@ public class Habito
         // 1. Se FrequenciaEm(hoje) == nova, não faz nada
         if (FrequenciaEm(hoje) == novaFrequencia)
         {
-            return;
+            return false;
         }
 
         // 2. Se já existe agenda com VigenteDesde == hoje
@@ -116,19 +116,20 @@ public class Habito
             {
                 // Se ficou igual à agenda anterior, remove a agenda de hoje
                 _agendas.Remove(agendaDeHoje);
+                return true;
             }
             else
             {
                 // Substitui a frequência da agenda de hoje
                 agendaDeHoje.AtualizarFrequencia(novaFrequencia);
+                return true;
             }
-
-            return;
         }
 
         // 3. Senão, adiciona uma nova agenda com VigenteDesde = hoje
         var novaAgenda = new AgendaHabito(Guid.CreateVersion7(), Id, hoje, novaFrequencia);
         _agendas.Add(novaAgenda);
+        return true;
     }
 
     public bool EstaMarcadoEm(DateOnly data)
