@@ -172,7 +172,14 @@ public class Habito
         }
     }
 
+    public void AdicionarMarcacaoParaTeste(DateOnly data, DateTime agoraUtc)
+    {
+        if (EstaMarcadoEm(data)) return;
+        _marcacoes.Add(new Marcacao(Guid.CreateVersion7(), Id, data, agoraUtc));
+    }
+
     public int MarcacoesNaSemana(DateOnly data)
+
     {
         var inicioSemana = Semana.InicioDe(data);
         var fimSemana = inicioSemana.AddDays(6);
